@@ -12,6 +12,12 @@ import numpy as np
 
 # from ca_tasks import perturb_ca
 
+def job_listener(event):
+    if not event.exception:
+        job = scheduler.get_job(event.job_id)
+        if job.name == "1":
+            print("wee")
+
 def perturb_ca(data):
     print("hi")
     # return data
