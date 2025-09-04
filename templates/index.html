@@ -16,12 +16,32 @@
             overflow: hidden;
         }
     </style>
+    <script src="{{ url_for('static', filename='socket.io.min.js') }}"></script>
     <script src="{{ url_for('static', filename='p5.min.js') }}"></script>
-    <!-- <script src="{{ url_for('static', filename='responsive-canvas.js') }}"></script> -->
 </head>
 
 <body>
     <script>
+        // socketio
+        let socket;
+
+        window.onload = () => {
+            socket = io(); 
+
+            socket.on('connect', function() {
+                socket.emit('user_connect', {data: "New user connected"});
+            });
+
+            socket.on("tick", function(msg) {
+                data = JSON.parse(msg.data);
+                update = true;
+            });
+
+            let tickInterval = setInterval(function() {
+                socket.emit('tick_request');//, {});
+            }, 200);
+        }
+
         let data = JSON.parse('{{ data }}')
         console.log(data);
 
