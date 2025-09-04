@@ -1,6 +1,3 @@
-<!-- 
-responsive code: https://www.jgibson.id.au/blog/responsive-canvas/
--->
 <!doctype html>
 <html>
 
@@ -23,24 +20,47 @@ responsive code: https://www.jgibson.id.au/blog/responsive-canvas/
         console.log(data);
 
         let cell_w, cell_h;
+        let half_cell_w, half_cell_h;
+
+        // draw slightly larger to avoid bordery-look
+        let cell_w_border, cell_h_border;
+        let update = true;
 
         function setup() {
             createCanvas(windowWidth, windowHeight);
             background(20);
+            rectMode(CENTER);
 
+            recalculateSizes();
+        }
+
+        function recalculateSizes() {
             cell_w = width / data[0].length;
             cell_h = height / data.length;
+            cell_w_border = cell_w * 1.05;
+            cell_h_border = cell_h * 1.05;
+            half_cell_w = cell_w / 2;
+            half_cell_h = cell_h / 2;
+            update = true;
         }
 
         function draw() {
-            noStroke();
-            for (let r = 0; r < data.length; r++) {
-                for (let c = 0; c < data[r].length; c++) {
-                    let col = map(data[r][c], 0.0, 1.0, 0, 220);
-                    fill(col);
-                    rect(c*cell_w, r*cell_h, cell_w, cell_h);
+            if (update) {
+                noStroke();
+                for (let r = 0; r < data.length; r++) {
+                    for (let c = 0; c < data[r].length; c++) {
+                        let col = map(data[r][c], 0.0, 1.0, 0, 220);
+                        fill(col);
+                        rect(half_cell_w + c * cell_w, half_cell_h + r * cell_h, cell_w_border, cell_h_border);
+                    }
                 }
+                update = false;
             }
+        }
+
+        function windowResized() {
+            resizeCanvas(windowWidth, windowHeight);
+            recalculateSizes();
         }
 
     </script>
